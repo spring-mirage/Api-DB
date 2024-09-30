@@ -1,7 +1,7 @@
-import express from 'express';
+import { Router } from 'express';
 import { USER_DDBB } from '../bbdd.js';
 
-const router = express.Router();
+const router = Router();
 
 router.use((req, res, next) => {
     console.log(req.ip);
