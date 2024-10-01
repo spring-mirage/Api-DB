@@ -1,18 +1,18 @@
 import { Router } from 'express';
 import { USER_DDBB } from '../bbdd.js';
 
-const router = Router();
+const accountRouter = Router();
 
-router.use((req, res, next) => {
+accountRouter.use((req, res, next) => {
     console.log(req.ip);
     next();
 });
 
-router.get('/', (req, res) => {
+accountRouter.get('/', (req, res) => {
     return res.send('User section');
 });
 
-router.get('/:id', (req, res) => {
+accountRouter.get('/:id', (req, res) => {
     const { id } = req.params;
     const user = USER_DDBB.find((user) => user.id === id);
     if (user) {
@@ -23,7 +23,7 @@ router.get('/:id', (req, res) => {
 });
 
 //create a new accound from the id and name
-router.post('/', (req, res) => {
+accountRouter.post('/', (req, res) => {
     const { id, name } = req.body;
 
     if(!id || !name) {
@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
 });
 
 //update the name of the account
-router.patch('/:id', (req, res) => {
+accountRouter.patch('/:id', (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
     if(!name) {
@@ -59,7 +59,7 @@ router.patch('/:id', (req, res) => {
     }
 });
 
-router.delete('/:id', (req, res) => {
+accountRouter.delete('/:id', (req, res) => {
     const { id } = req.params;
     const userIndex = USER_DDBB.findIndex((user) => user.id === id);
     if (userIndex === -1) {
@@ -70,4 +70,4 @@ router.delete('/:id', (req, res) => {
     }
 });
 
-export default router;
+export default accountRouter;
