@@ -5,16 +5,29 @@ import Ajv from 'ajv';
 
 const LoginDTOSchema = Type.Object(
     {
-        email: Type.String(),
-        password: Type.String()
+        email: Type.String({
+            format: 'email',
+            errorMessage: {
+                type: 'The type of email must be a string',
+                format: 'The format of email is invalid'
+            }
+        }),
+        password: Type.String({
+            errorMessage: {
+                type: 'The type of password must be a string'
+            }
+        })
     }, 
     { 
-        additionalProperties: false 
+        additionalProperties: false,
+        errorMessage: {
+            type: 'The object format is not valid',
+        }
     }
 )
 
 const ajv = new Ajv({allErrors: true});
-addFormats(ajv).addKeyword('kind').addKeyword('modifier');
+addFormats(ajv, ['email']).addKeyword('kind').addKeyword('modifier');
 addErrors(ajv);
 
 const validate = ajv.compile(LoginDTOSchema);
@@ -23,7 +36,7 @@ const validateLoginDTO = (req, res, next) => {
     const isDTOValit = validate(req.body);
 
     if(!isDTOValit) {
-        res.status(400).send('The body is not valid');
+        res.status(400).send(ajv.errorsText(validate.errors, {separator: '\n'}));
     }
 
     next();

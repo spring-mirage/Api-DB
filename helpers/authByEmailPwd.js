@@ -5,11 +5,11 @@ const authByEmailPwd = (email, password) => {
     const user = USER_DDBB.find((user) => user.email === email);
 
     if (!user) {
-        throw new Error('User not found');
+        throw new Error('Email not registered');
     }
 
     if (user.password !== password) {
-        throw new Error('Invalid password');
+        throw new Error('Wrong password');
     }
     return user;
 }
